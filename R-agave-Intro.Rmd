@@ -1,0 +1,238 @@
+---
+title: "The Agave R SDK"
+output:
+  html_document:
+    df_print: paged
+---
+
+In this notebook, we introduce some basic uses of the rAgave R library for interacting with the Agave Platform science-as-a-service APIs. The examples primarily draw from the files and metadata services, but the concepts introduced are broadly applicable to all Agave services. For more information about Agave, please see the developer site: http://docs.agaveplatform.org
+
+The rAgave library provides a high-level R binding to the Agave API. The first step is to import the Agave class:
+```{r}
+library("plyr")
+#install("~/rstudio/src/rAgave")
+library("rAgave")
+```
+
+Before we can interact with Agave, we need to instantiate a client. Typically, we would use the constructor and pass in our credentials (OAuth client key and secret as well as our username and password) together with configuration data for our "tenant", the organization within Agave with we wish to interact. For the sake of completeness, we will bootstrap our environment from scratch, creating a new client and auth token.
+
+```{r}
+# For security, we'll pull our variables from the environment rather than enter them directly. 
+myCreds <- Sys.getenv( c("AGAVE_USERNAME", "AGAVE_PASSWORD", "AGAVE_TENANT", "AGAVE_BASE_URL"), names = TRUE )
+```
+
+```{r}
+# Prompt for them if not present, and store them in the environment in case we rerun this later.
+if (is.null(myCreds[["AGAVE_USERNAME"]]) || nchar(myCreds[["AGAVE_USERNAME"]]) == 0) {
+  myCreds[["AGAVE_USERNAME"]] <- readline("Agave username:")
+  Sys.setenv(AGAVE_USERNAME = myCreds[["AGAVE_USERNAME"]])
+}
+
+if (is.null(myCreds[["AGAVE_PASSWORD"]]) || nchar(myCreds[["AGAVE_PASSWORD"]]) == 0) {
+  myCreds[["AGAVE_PASSWORD"]] <- readline("Agave password:")
+  Sys.setenv(AGAVE_PASSWORD = myCreds[["AGAVE_PASSWORD"]])
+}
+
+if (is.null(myCreds[["AGAVE_BASE_URL"]]) || nchar(myCreds[["AGAVE_BASE_URL"]]) == 0) {
+  myCreds[["AGAVE_BASE_URL"]] <- readline("Agave base url (https://public.agaveapi.co):")
+  Sys.setenv(AGAVE_BASE_URL = myCreds[["AGAVE_BASE_URL"]])
+}
+```
+
+Now we are ready to instantiate the Agave instance. We will explitly pass in the base url of our tenant, username, and password as named parameters. The result will be an Agave client instance we can use to interact with the Agave Platform APIs. 
+
+```{r}
+ag <-Agave$new( baseUrl=myCreds[["AGAVE_BASE_URL"]],
+                username = myCreds[["AGAVE_USERNAME"]], 
+                password = myCreds[["AGAVE_PASSWORD"]])
+```
+
+If you have logged into Agave before, your session will be refreshed automatically when you created the Agave client instance above. You can verify this by checking the `ag$clientInfo` and `ag$tokenInfo` attributes. 
+```{r}
+assertthat::not_empty(ag$clientInfo) && assertthat::not_empty(ag$tokenInfo)
+```
+The `ag$authCheck` method is another convenient way to check your current session.
+
+```r
+ag$authCheck
+```
+
+If you do not already have a valid token, you can create one by calling the `ClientsApi$create()` method of ClientsApi. An example is given below:
+```{r}
+clientName <- paste0(c(myCreds[["AGAVE_USERNAME"]],"_training_rstudio"))
+if (!assertthat::not_empty(ag$clientInfo)) {
+  # we will delete the client by name just in case it exists, but was not saved on the file system
+  # behind this notebook.
+  ag$clients$delete(clientName=clientName)
+  
+  # Now we fetch a new set of client keys from Agave. These will save in our local
+  # cache by default, so there's nothing you have to explicitly remember
+  client <- ag$clients$create(body=list("clientName"=clientName))
+  
+  # Once we have a valid client, we can tell Agave to startup a new session for us
+  # by pulling a fresh auth token, updating our local session cache, and 
+  # initializing all our service endpoints.
+  ag$initialize()
+}
+```
+
+Your token will generally last for about 4 hours. (This can vary from tenant to tenant.) The rAgave library's Agave class provides a `restore()` method you can call to reconstituting previous OAuth sessions. 
+
+```{r}
+ag$restore()
+```
+
+Your sessions are read from and written to a cache file common to all the Agave SDK, `~/.agave/current`, by default. Because of this, your OAuth sessions persist across RStudio, Zeplin, Jupyter, and CLI interactions. 
+
+> If you are using the hosted Agave RStudio service, a valid OAuth session was created for you and stored in your `~/.agave/current` file. We can therefore use the restore method to create an OAuth client without needing to pass any credentials:
+
+Your OAuth token does not contain any identifiable information in and of itself, however we can discover information about the user associated with a token by calling the Profiles API:
+
+```{r}
+profile <- ag$profiles$getProfile()
+str(profile)
+```
+
+Finally, to find out the other attributes and methods available from the `ag` object, standard R completion (`F1`), and the native `help` command both work.
+
+```r
+help(Agave)
+?(Agave)
+?(Metadata)
+```
+
+We are now ready to interact with Agave services using our rAgave client. We can take a quick look at the available top-level methods of our client:
+
+
+```{r}
+str(Agave$public_fields)
+```
+
+We see there is a top-level method for each of the core science APIs in agave. We will focus on the apps service since it is of broad interest, but much of what we illustrate is generally applicable to all Agave core science APIs. 
+
+We can browse a specific collection using the list() method. For example, let's see what apps are available to us:
+
+
+```{r}
+str(head(ag$apps$listApps(),5))
+```
+
+
+What we see in the output above is a serialized R list of the first 5 JSON objects returned from Agave's apps service. It is a list of objects, each of which representing a single app. Let's capture the first app object and inspect it. To do that we can use normal R list notation:
+
+
+```{r}
+app = ag$apps$listApps()[[1]]
+```
+
+
+
+```{r}
+typeof(app); str(app)
+```
+
+
+We see that the app object is of type `list`. That's native R built-in type. Thus, fields may be accessed and modified in standard ways. For example, we see that the app object has an 'id' key. We can access it directly using `$` notation:
+
+
+```{r}
+app$id
+```
+
+Equivalently, we can use normal R vector syntax:
+
+
+```{r}
+app[['id']]
+```
+
+In Agave, the app id is the unique identifier for the application. We'll come back to that in a minute. For now, just know that this example is very typical of responses from rAgave: in general the JSON response object is represented by lists of `list` objects
+
+Stepping back for a second, let's explore the apps collection a bit. We can always get a list of operations available for a collection by printing the collection object:
+
+
+```{r}
+print(ag$apps)
+```
+
+Also notice that we have tab-completion on these operations. So, if we start typing "ag$apps$l" and then hit tab, RStudio provides a select box of operations beginning with "l". Try putting the following cell in focus and then hitting the tab key (but don't actually hit enter or try to execute the cell; otherwise you'll get an exception because there's no method called "l"):
+
+
+```{r}
+ag$apps$l
+```
+
+If we would like to get details about a specific object for which we know the unique id, in general we use the get method, passing in the id for the object. Here, we will use an app id we found from the ag.apps.list command.
+
+
+```{r}
+str(ag$apps$getAppDetails(appId=app$id))
+```
+
+Whoa, that's a lot of information. We aren't going to give a comprehensive introduction to Agave applications in this notebook. Instead we refer you to the official Agave app tutorial on the website: http://docs.agaveapi.co/#apps.
+
+However, we will point out a couple of important points. Let's capture that response in an object called `app`:
+
+```{r}
+app = ag$apps$getAppDetails(appId=app$id)
+```
+
+Complex sub-objects of the application such as application inputs and parameters come back as top level attributes, and are represented as lists. The individual elements of the list are represented as nested lists We can see this by exploring our `app`'s inputs:
+
+
+```{r}
+typeof(app$inputs)
+typeof(app$inputs[[1]])
+str(app$inputs[[1]])
+```
+
+
+Then, if we want the input id, we can use dot notation or dictionary notation just as before:
+
+
+```{r}
+app$inputs[[1]]$id
+```
+
+You now have the ability to fully explore individual Agave objects returned from rAgave, but what about searching for objects? The Agave platform provides a powerful search feature across most services, and rAgave supports that as well. 
+
+Every retrieval operation in rAgave (for example, `apps$list_apps()`) supports a "search" argument. The syntax for the search argument is identical to that described in the Agave documentation: it uses a dot notation combining search terms, values and (optional) operators. The search object itself should be a `list` of key value pairs where both the keys and values are string values. Formally, each "key" = "value" pair in the dictionary adheres to the following form: 
+                        $$term.operator:value$$
+The operator is optional and defaults to equality ('eq'). For example, the following search filters the list of all apps down to just those with the id attribute equal to our app$id:
+
+
+```{r}
+str(ag$apps$listApps(search=list("id" = app$id))[[1]])
+```
+
+Equivalently, we could explicitly set the equality operator:
+
+
+```{r}
+str(ag$apps$listApps(search=list("id.eq" = app$id))[[1]])
+```
+
+Typically, the list of available search terms is identical to the attributes included in the JSON returned when requesting the full resource description. Operators include 'like', 'lt', 'gt', 'lte', 'gte', etc. See the official Agave documentation for the complete list. 
+
+Here we retrieve all apps with a name is "like" "docker":
+
+```{r}
+apps = ag$apps$listApps(search=list("id.like" = "*docker*"), limit=2)
+str(lapply(apps, function(app) app$id))
+```
+
+```{r}
+str(lapply(apps, function(x) x$id ))
+```
+
+Two results were returned, both with name containing the term, "docker".
+
+You can include multiple search expressions in the form of additional key:value pairs to build a more restrictive query. Here we restrict the result to docker apps with revision at least 3:
+
+
+```{r}
+str(ag$apps$listApps(search=list("name.like" = "*docker*", "revision.gte" = 2)))
+```
+
+We hope this gives you enough general information to begin exploring the Agave services using rAgave on your own. In subsequent notebooks, we'll take deeper dives into specific topics such as using rAgave to launch and monitor an Agave job executing OpenSees on Stampede.
+

@@ -1,0 +1,142 @@
+---
+title: "R Data Science - Intro to Plots"
+output: html_notebook
+authors: Sean Cleveland and Mahdi Belcaid
+---
+
+
+```{r}
+spending_df <- read.csv(file="data/spending_10k.tsv", header=TRUE, sep="\t")
+spending_df
+```
+### Creating a Graph
+The R plot function has a usefule number of graphs. Documentation for plot can be found here (https://www.rdocumentation.org/packages/graphics/versions/3.5.0/topics/plot) 
+
+-The parameters required for a simple  scatter plot is x and y.
+```{r}
+plot(x=spending_df$spending,y=spending_df$nb_beneficiaries)
+```
+To add a title and modify the labels we can add the "main","xlab" and "ylab" paramters.
+```{r}
+plot(x=spending_df$spending,y=spending_df$nb_beneficiaries,main="Spending vs. NB Beneficiaries", xlab="Spending",ylab="Medication")
+```
+To change the color we can add the "col" paramter.
+```{r}
+plot(x=spending_df$spending,y=spending_df$nb_beneficiaries,main="Spending vs. NB Beneficiaries", xlab="Spending",ylab="Medication",col="blue")
+```
+To modify the graph type the "type" parameter can be set. "h" can be used for a histogram
+```{r}
+plot(x=spending_df$spending,y=spending_df$nb_beneficiaries,main="Spending vs. NB Beneficiaries", xlab="Spending",ylab="Medication",col="blue",type="h")
+```
+#### Histograms
+
+R has a "hist" function for ploting histogram of the frequency of the data.  The first parameter is the data column we can to plot.  The others like "main","xlab" and "col" we saw in the "plot" function.  
+```{r}
+hist(spending_df$nb_beneficiaries,
+     main=" Histogram of NB Beneficiaries",
+     xlab="NB Beneficiaries", 
+     border="blue", 
+     col="green")
+```
+We can pass data to the hist function that has a function applied to it such as a log:
+```{r}
+hist(log(log(spending_df$nb_beneficiaries)),
+     main="Histogram of NB Benificiaries",
+     xlab="NB Benificiaries", 
+     border="green", 
+     col="blue")
+```
+### Saving Plots As Images
+R make it pretty simple to save plots as an image with  "png","jpeg" or "pdf" functions.
+- All the function require a filename and the function call to start capture the plot
+- After starting your capture you can render your plot
+- Finally you need to close the capture
+```{r}
+png(filename="hist.png") #being capture in a png
+plot(x=spending_df$spending,y=spending_df$nb_beneficiaries,main="Spending vs. NB Beneficiaries", xlab="Spending",ylab="Medication",col="blue")
+while (!is.null(dev.list()))  dev.off() #close our capture
+
+jpeg(filename="hist.jpg") # begin capturing in a jpeg
+plot(x=spending_df$spending,y=spending_df$nb_beneficiaries,main="Spending vs. NB Beneficiaries", xlab="Spending",ylab="Medication",col="blue")
+while (!is.null(dev.list()))  dev.off() #close capture
+
+pdf("hist.pdf") #begin capturing in  pdf
+plot(x=spending_df$spending,y=spending_df$nb_beneficiaries,main="Spending vs. NB Beneficiaries", xlab="Spending",ylab="Medication",col="blue")
+while (!is.null(dev.list()))  dev.off() #close capture
+```
+### Visualizing Linear Relationships
+Now let’s perform a linear regression using lm() on two variables - log nb_benificiaries and log spending:
+
+```{r}
+lm(log(spending_df$nb_beneficiaries) ~ log(spending_df$spending))
+```
+We see that the intercept is 1.942 and the slope is 0.218. By the way – lm stands for “linear model”.
+
+We can now plot a best fit line (regression line) to a plot of log nb_beneficiaries vs log spending with:
+```{r}
+log_nb <- log(spending_df$nb_beneficiaries)
+log_spending <- log(spending_df$spending)
+plot(log_nb ~ log_spending,data=spending_df,main="Log NB Beneficiaries vs Log Spending", xlab="Log NB Beneficiaries",ylab="Log Spending",col="blue")+
+abline(lm(log_nb ~ log_spending))
+```
+### Combining Plots
+R makes it easy to combine multiple plots into one overall graph, using either the 
+par( ) function.
+
+With the par( ) function, you can include the option mfrow=c(nrows, ncols) to create a matrix of nrows x ncols plots that are filled in by row. mfcol=c(nrows, ncols) fills in the matrix by columns.
+```{r}
+par(mfrow=c(2,2))
+plot(log_nb ~ log_spending,data=spending_df,main="Log NB Beneficiaries vs Log Spending", xlab="Log NB Beneficiaries",ylab="Log Spending",col="blue")+
+abline(lm(log_nb ~ log_spending))
+hist(log(log(spending_df$nb_beneficiaries)),
+     main="Histogram of NB Benificiaries",
+     xlab="NB Benificiaries", 
+     border="green", 
+     col="blue")
+plot(x=spending_df$spending,y=spending_df$nb_beneficiaries,main="Spending vs. NB Beneficiaries", xlab="Spending",ylab="Medication",col="blue",type="h")
+plot(x=spending_df$spending,y=spending_df$nb_beneficiaries,main="Spending vs. NB Beneficiaries", xlab="Spending",ylab="Medication")
+```
+### Boxplots
+Boxplots can be created for individual variables or for variables by group. The format is boxplot(x, data=), where x is a formula and data= denotes the data frame providing the data. An example of a formula is y~group where a separate boxplot for numeric variable y is generated for each value of group. Add varwidth=TRUE to make boxplot widths proportional to the square root of the samples sizes. Add horizontal=TRUE to reverse the axis orientation.
+```r
+boxplot(log_nb~log_spending,data=spending_df, main="Log NB Benenficiaries vs Log Spending", 
+  	xlab="Log NB Beneficiaries", ylab="Log Spending")
+```
+```{r}
+all_data <- read.csv("data/spending_with_drug_class_indic_10k.tsv", header=TRUE, sep="\t")
+all_data["log_nb_beneficiaries"] <- log(all_data$nb_beneficiaries)
+all_data["log_spending"] <-  log(all_data$spending)
+head(all_data)
+partial_spending_df <- subset(all_data,specialty %in% c("INTERNAL MEDICINE", "EMERGENCY MEDICINE", "PSYCHIATRY"))
+partial_spending_df
+spending_psych <- subset(all_data,specialty == "PSYCHIATRY")
+subset_df <- subset(partial_spending_df,indication_flag =='antibiotic' |  indication_flag == 'antipsychotic')
+subset_df
+head(spending_psych)
+par(mfrow=c(2,2))
+boxplot(nb_beneficiaries~specialty,data=subset_df, main="NB Benenficiaries vs Speciality", 
+  	xlab="NB Beneficiaries", ylab="Specialty",horizontal=TRUE)
+boxplot(nb_beneficiaries~indication_flag,data=subset_df, main="Log NB Benenficiaries vs Log Spending", 
+  	xlab="Log NB Beneficiaries", ylab="Log Spending",horizontal=TRUE)
+```
+### Practical
+
+- Start with a new R Notebook.
+
+
+- Read the file `data/medication_to_class_indiction.tsv` located in the data folder into a new  `DataFrame` called `spending_practical_df`.
+  
+- From the above, it seems that the values for `spending` and `nb_beneficiares` are very skewed. After computing the log for these values, you now want to see whether the distributions of the `log_nb_beneficiares` and `log_spending` look normal. Use the appropriate plot to visualize the values for these two variables side by side. 
+
+- What are the top five `specialties` in terms of their `nb_beneficiaries`
+  - Create a new `DataFrame` that contains only entries from the top five `specialties`. Call it `top_5_specialties`
+  - Use boxplots to visually compare distributions for the `log_nb_beneficiaries` column in `top_5_specialties`. 
+
+
+- Generate a regression plot where the `log_nb_benificiaries` is on the x-axis and the log_spending is on the y-axis for all entries of   spending_practical_df where  `specialty` is equal to "GERIATRIC MEDICINE."
+
+    
+- You are interested in the top 10 medicines that generated the most spending.
+  - Compute the total `spending` per medicine` and sort it by the most costly regarding spending to the least costly
+  - Use a barplot to plot the 10 medicines that account for most of the spending.
+

@@ -1,0 +1,72 @@
+---
+title: "R Data Science - Mising Data"
+output: html_notebook
+authors: Sean Cleveland and Mahdi Belcaid
+---
+### Working with Missing Data
+
+* Given the pervasiveness of missing values in real data, R provides easy to use functionality for handling missing values.
+
+* When working with missing data, the objectives can be boiled down to:
+  + Identifying missing value
+  + Filling missing values
+  + Filtering rows or column with missing values
+  
+```{r}
+spending_df <- read.csv(file="data/spending_correc_data_t.csv", header=TRUE, sep=",")
+row.names(spending_df) <- spending_df$unique_id # set the data frame index to the unique_id column
+spending_df$unique_id <- NULL # remove the unique_id column since we have the values in the data frame index
+spending_df
+```
+##### 1. Identifying Missing Values
+
+- This is typically achieved with the  `is.na()` method.
+- This method returns `True` if a cell contains a `NaN` value, and returns `False` otherwise.
+
+- When applied to the spending_df, the spending value for `unique_id` CC128705 evaluates `isnull()` to `True`.
+
+```{r}
+is.na(spending_df) # returns TRUE if data is missing
+```
+
+##### 2. Filtering Out Missing Values - 1
+
+- Various approaches can be used to filter out missing value.
+
+
+- For instance, you can discard missing values using subsetting.
+
+
+- For example, you can filter out missing values in the `spending` `Series` using na.omit
+
+```r
+spending_df_not_na <- na.omit(spending_df)
+spending_df_not_na
+```
+##### Filling In Missing Values 
+
+- There  are two conventional approaches for filling missing value:
+  - Filling the value with a constant 
+  - Filling the value dynamically with something computed on the fly.
+
+```r
+spending_df_constant <- spending_df
+spending_df_constant[is.na(spending_df_constant)] <- 0 #For instance
+spending_df_constant
+```
+##### Filling In Missing Values with a function - like a mean
+Often we want to use a better value than a constant so we can replace the NA value with the result of function such as the mean of a column.
+
+- The below ifelse() function returns the  mean value if its first argument is NA. Otherwise, it returns the first argument.  Using this we can replace NA values in speding_df_dynamic with the "spending" column mean (this mean excludes NA values via the na.rm=TRUE)
+```r
+spending_df_dynamic <- spending_df
+spending_df_dynamic$spending <- ifelse(is.na(spending_df_dynamic$spending), mean(spending_df_dynamic$spending, na.rm=TRUE), spending_df_dynamic$spending)
+spending_df_dynamic
+```
+
+```r
+temp_spending_df <- spending_df
+
+```
+
+

@@ -1,0 +1,47 @@
+---
+title: "Tutorial installation"
+author: "Rion Dooley"
+date: "7/12/2018"
+output: html_document
+---
+
+Please run this notebook to completion to install the latest version of the tutorial notebooks on this Jupyter server.
+
+```{bash}
+# setting up a temp directory to checkout the git repository
+export TUTORIAL_FOLDER="$HOME/tutorial-$(date +%s)"
+echo $TUTORIAL_FOLDER
+```
+
+```{bash}
+# check out the git repository
+git clone --depth 1 https://github.com/agavetraining/gateways18.git $TUTORIAL_FOLDER
+```
+
+```{bash}
+# the latest notebooks should all be present
+ls -l $TUTORIAL_FOLDER  | grep ".Rmd"
+```
+
+```{bash}
+# list current tutorials
+cd $HOME
+ls -l | grep ".ipynb"
+```
+
+```{bash}
+# check that the checkout completed
+if [[ -d $TUTORIAL_FOLDER ]]; then 
+    # backup current tutorials
+    mkdir -p "$HOME/work/tutorial-backup-$(date +%s)"
+    cp $HOME/*.Rmd $HOME/*.html $HOME/data $HOME/work/tutorial-backup-$(date +%s)
+
+    cp -rf $TUTORIAL_FOLDER/* .
+    
+    echo "Installation completed successfully."
+else
+    echo "Tutorial checkout directory is missing. No tutorials will be updated"
+fi
+```
+
+If the installation completed successfully, you are ready to being using the Agave Jupyter server. Please open the [00 - Introduction.ipynb](/notebooks/00%20-%20Introduction.Rmd) notebook to begin the tutorial.

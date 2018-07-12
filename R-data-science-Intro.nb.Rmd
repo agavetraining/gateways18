@@ -1,0 +1,222 @@
+---
+title: "R Data Science - Intro to Data Frames"
+output:
+  pdf_document: default
+  html_notebook: default
+  html_document: default
+authors: Sean Cleveland and Mahdi Belcaid
+---
+#### About the Data
+We will be working with the data in the "data/spending.csv"" file. The data contains a subset the cost of drugs prescribes to Medicare patients by prescribing doctors
+
+* The complete dataset is publicly available on the Centers for Medicare & Medicaid Services (CMS website):
+
+* This toy dataset contains the following columns:
+
+| Column |Description|
+|:----------|-----------|
+| `unique_id`| A unique identifier for a Medicare claim to CMS |
+| `doctor_id` | The Unique Identifier of the doctor who <br/> prescribed the medicine  |
+| `specialty` | The specialty of the doctor prescribed the medicine |
+| `medication` | The medication prescribed |
+| `nb_beneficiaries` | The number of beneficiaries the <br/> medicine was prescribed to  |
+| `spending` | The total cost of the medicine prescribed <br/>for the CMS |
+
+#### Reading Data in R
+Let’s import the file called ".csv"" into our R environment. 
+
+The data file is located in the directory "data" inside the working directory our R notebooks are in. Now we can load the data into R using "read.csv" and which will create a data frame.  To use that data frame we need to assign it to a variable - we will call it "spending_df". This file has tabs so we use the "\t" to denote tab delimited in our read.csv command. We also tell the "read.csv" command that the file has a header row that can used as the data frame column names with the "header = TRUE" argument.
+
+```r
+spending_df <- read.csv("data/spending.csv", header = TRUE, sep = "\t")
+spending_df
+```
+```{r}
+spending_df <- read.csv("data/spending.csv", header = TRUE, sep = "\t")
+spending_df
+```
+### Dimensions of the DataFrame 
+
+- A useful property of the `DataFrame` is the `dim`
+
+  - This property describes the number of lines and the number of columns in your `DataFrame`.
+  
+```r
+dim(spending_df)
+```
+```{r}
+dim(spending_df)
+```
+The above indicates that the `spending_df`  `DataFrame` has `9` rows (table entries) and `6` columns.
+
+The functions "nrow"" and "ncol" are also available to provide number of rows or number of columns.
+```r
+nrow(spending_df)
+```
+```{r}
+nrow(spending_df)
+```
+```r
+ncol(spending_df)
+```
+```{r}
+ncol(spending_df)
+```
+
+#### Indexing a data frame
+
+- Row indexing can be carried out by passing the  (index location) to the data frame
+```r
+spending_df[3,] #third row
+```
+```{r}
+spending_df[3,] #third row
+```
+
+or
+```r
+spending_df[1,5] #first row fifth column
+```
+```{r}
+spending_df[1,5] #first row fifth column
+```
+
+- When a single index is given R returns a row
+  
+- When a pair of indices is given R returns the value of the data in the cell specificied
+
+We can also select multiple rows and columns by passing the index method a list of what we want like so:
+```r
+spending_df[c(1,3,5),c(2,3)] # select rows with labels 1,3 and 5 and return columns 2 and 3
+```
+```{r}
+spending_df[c(1,3,5),c(2,3)] # select rows with labels 1,3 and 5 and return columns 2 and 3
+```
+### Specifying and Index Labels
+- Initial index labels are assigned in ascending order (keep in mind these numbers are not a count but a label)
+- We can use any column of the data to label the indexes by passing the label of the column you want to use to `row.names()` function.
+  - For example, we can use the `unique_id` column as index labels 
+```r
+row.names(spending_df) <- spending_df$unique_id # set the data frame index to the unique_id column
+spending_df$unique_id <- NULL # remove the unique_id column since we have the values in the data frame index
+spending_df
+```
+```{r}
+row.names(spending_df) <- spending_df$unique_id # set the data frame index to the unique_id column
+spending_df$unique_id <- NULL # remove the unique_id column since we have the values in the data frame index
+spending_df
+```
+Now we can select a row by the unique_id like so:
+```r
+spending_df['AB789982',]
+```
+```{r}
+spending_df['AB789982',]
+```
+### Inspecting DataFrames
+- When a `DataFrame` contains a large number of rows it's common to use the function `head` 
+```r
+head(spending_df)
+```
+```{r}
+head(spending_df)
+```
+or `tail` to display the first of last five entries, respectively, of the `DataFrame`.
+```r
+tail(spending_df)
+```
+```{r}
+tail(spending_df)
+```
+### Selecting by Columns 
+To select a few columns from a data frame we can simple pass in a list of the column to the data frame like so:
+```r
+spending_df[c("doctor_id","medication")]
+```
+```{r}
+spending_df[c("doctor_id","medication")]
+```
+
+#### Subsetting data 
+In R we can subset data using the subset function. The "subset" function allows us to pull data based on an expression and list of columns. In order to do so we have to pass it subset our data frame, the expression to select rows by and list of column names we wish to extract to the 'select' parameter.  For instance we can select data where nb_beneficiaries are greate than 100 and the "doctor_id" "nb_beneficiaries" and "medication columns" and assign it to a new data frame called "temp_data" like so:
+```r
+temp_data <- subset(spending_df,nb_beneficiaries > 100, select=c("doctor_id","medication"))
+temp_data
+```
+```{r}
+temp_data <- subset(spending_df,nb_beneficiaries > 100, select=c("doctor_id","medication"))
+temp_data
+```
+
+
+#### Converting columns to numeric
+Some of the data in our data set looks like numbers to us but to R it does not and has been classified as a 'factor' - which is essentially a category.  The "spending"" column in our data set is currently a factor - these means we can use logical operators like >, <, >= etc because those don't have any meaning on a category.  So to be able to use those operators we need to convert our "spending" column to a numeric column of data.
+
+One way to do this is to use a regular expression to remove any characters that are not numeric and then use the as.numeric function like this:
+```r
+temp_spending_df <- spending_df
+temp_spending_df$spending <- as.numeric(gsub('[$,]', '', temp_spending_df$spending))
+temp_spending_df
+```
+```{r}
+temp_spending_df <- spending_df
+temp_spending_df$spending <- as.numeric(gsub('[$,]', '', temp_spending_df$spending))
+temp_spending_df
+```
+The "spending" column can now be subsetted using logical operators so if we wanted to find all the rows with spending over 3000.00 we can use:
+```r
+temp_spending_sub <- subset(temp_spending_df, spending > 3000.00)
+temp_spending_sub
+```
+
+Another way to convert our factor data to numeric data is to use an R package called "readr".  To do this we have to install the package and load it.
+```r
+install.packages('readr')
+library('readr')
+```
+```{r}
+install.packages('readr')
+library('readr')
+```
+With the new package installed we can now use it to do this conversion. The 'readr' package has a hand function for converting columns into numbers with us having to write a regular expression and doing a string substitution to remove all the non-number charcters.  So using 'readr' we can simply write:
+```{r}
+temp_spending_df2 <- spending_df
+temp_spending_df2$spending <- parse_number(temp_spending_df2$spending)
+temp_spending_df2
+```
+### Sorting
+To sort a data frame in R, use the order( ) function. By default, sorting is ASCENDING. Prepend the sorting variable by a minus sign to indicate DESCENDING order. 
+```r
+sorted_spending_df <- spending_df[order(-spending),] #descedning sort by spending
+head(sorted_spending_df, 10) # return the first 10 rows
+```
+```{r}
+sorted_spending_df <- spending_df[order(-spending),] #descedning sort by spending
+head(sorted_spending_df, 10) # return the first 10 rows
+```
+We can also sort by multiple columns - so lets sort by "medication" and descending "spending":
+```r
+sorted_spending_df <- spending_df[order(medication,-spending),] 
+head(sorted_spending_df, 10) # return the first 10 rows
+```
+```{r}
+sorted_spending_df <- spending_df[order(medication,-spending),] 
+head(sorted_spending_df, 10) # return the first 10 rows
+```
+
+### Practical
+
+- Start with a new R Notebook
+
+- Read the file `intro_r_practical.tsv` located in the data folder into a new  DataFrame called `spending_practical_df`.
+  
+- Use an appropriate R method to display the first five lines of `spending_practical_df`
+
+
+- How many rows and columns does the DataFrame contain?
+
+- Write a statement that returns the `spending`  (column) of  `spending_practical_df`.
+
+- Write a single statement that returns lines 1st, 5th  and 10th lines of `spending_practical_df`.
+
+- Write a single statement that returns the columns `specialty` and `spending` for the rows with labels 12 and 21 of `spending_practical_df`.

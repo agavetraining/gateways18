@@ -1,0 +1,29 @@
+---
+title: "R Data Science - Intro to Data Frames -Practical"
+output: html_notebook
+---
+
+### Practical
+
+- Start with a new R Notebook
+
+- Read the file `intro_r_practical.tsv` located in the data folder into a new  DataFrame called `spending_practical_df`.
+  
+- Use an appropriate R method to display the first five lines of `spending_practical_df`
+
+
+- How many rows and columns does the DataFrame contain?
+
+- Write a statement that returns the `spending`  (column) of  `spending_practical_df`.
+
+- Write a single statement that returns lines 1st, 5th  and 10th lines of `spending_practical_df`.
+
+- Write a single statement that returns the columns `specialty` and `spending` for the rows with labels 12 and 21 of `spending_practical_df`.
+```{r}
+df <- read.csv("data/intro_r_practical.tsv", header = TRUE, sep = "\t")
+head(df)
+dim(df)
+df[c("spending")]
+df[c(1,5,10),]
+df[c(12,21),c("specialty","spending")]
+```
