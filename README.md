@@ -87,9 +87,37 @@ Schedule
 Presenters
 ----------
 
-<h3>Rion Dooley<br><span style="font-size: .8em"><a href="https://twitter.com/deardooley/">DNA Consulting</a></span></h3><div style="width:100% margin-top: 15px;" class="biography info-section"><div style="float:left; margin-right: 15px;" class="presenter-photo"> <img style="border-radius: 50%;border: 1px solid #ccc;" src="https://raw.githubusercontent.com/agavetraining/gateways18/master/images/rion_dooley.jpg" scale="0"></div><div style="font-size: 1.6rem; line-height: 1.625;font-weight: bold;" class="biography-header">Biography</div><div style="font-size: 1.6rem; line-height: 1.625;" class="presenter-biography">Rion Dooley is principal investigator on the Agave Project a Science-as-a-Service API platform allowing researchers worldwide to manage data, run code, collaborate freely, and integrate their science anywhere. His previous projects span areas of identity management, distributed web security, full-stack application development, data management, cloud services, and high performance computing. He earned his Ph.D. in computer science from Louisiana State University. Rion actively puts his wife and two daughters at the top of his list of accomplishments. He hopes his work can someday edge out dancing teddy bears and smear-proof lipstick on their lists of favorite inventions.</div></div>
 
-<h3>Sean Cleveland<br><span style="font-size: .8em"><a href="https://hawaii.edu/">University of Hawaii</a></span></h3><div style="width:100% margin-top: 15px;" class="biography info-section"><div style="float:left; margin-right: 15px;" class="presenter-photo"> <img style="border-radius: 50%;border: 1px solid #ccc;" src="https://raw.githubusercontent.com/agavetraining/gateways18/master/images/sean_cleveland.jpg" scale="0"></div><div style="font-size: 1.6rem; line-height: 1.625;font-weight: bold;" class="biography-header">Biography</div><div style="font-size: 1.6rem; line-height: 1.625;" class="presenter-biography"> </div></div>
+<table>
+    <tbody>
+  <tr>
+    <td>
+    <h3>Rion Dooley<br><span style="font-size: .8em"><a href="https://twitter.com/deardooley/">DNA Consulting</a></span></h3>
+      <div>
+        <img style="width:224px;" src="https://raw.githubusercontent.com/agavetraining/gateways18/master/images/rion_dooley.jpg">
+      </div>
+    </td>
+    <td>
+      Rion Dooley is principal investigator on the Agave Project a Science-as-a-Service API platform allowing researchers worldwide to manage data, run code, collaborate freely, and integrate their science anywhere. His previous projects span areas of identity management, distributed web security, full-stack application development, data management, cloud services, and high performance computing. He earned his Ph.D. in computer science from Louisiana State University. Rion actively puts his wife and two daughters at the top of his list of accomplishments. He hopes his work can someday edge out dancing teddy bears and smear-proof lipstick on their lists of favorite inventions.
+    </td>
+  </tr>
+  <tr>
+    <td>  
+    <h3>Sean Cleveland<br>
+    <span style="font-size: .8em">
+        <a href="https://hawaii.edu/">University of Hawaii</a>
+    </span>
+    </h3>
+    <div> 
+        <img style="width:224px;" src="https://raw.githubusercontent.com/agavetraining/gateways18/master/images/sean_cleveland.jpg">
+    </div>
+    </td>
+    <td>
+    Sean Cleveland is a Cyberinfrastructure Research Scientist in the Department of Cyberinfrastructure within Information Technology Services at the University of Hawaii. He focuses on supporting the research mission by providing technology assistance and solutions for researchers across the University of Hawaii system. In addition, he is assisting in the rollout of new centralized computing resources and services for the University system. Sean earned his B.S. in Computer Science from Montana State University in 2002 and his doctorate in Microbiology, with an emphasis in Bioinformatics, from Montana State University in 2013.His research interests include evolutionary dynamics, disorder, compensatory mutations and intra-residue contact prediction, and data lifecycle management
+    </td>
+  </tr>
+  </tbody>
+</table>
 
 
 
