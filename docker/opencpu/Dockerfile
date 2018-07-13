@@ -22,6 +22,8 @@ RUN mkdir -p /home/opencpu/work/.agave && \
 COPY docker/opencpu/server.conf /etc/opencpu/server.conf
 COPY docker/opencpu/AgaveBootstrap.r /AgaveBootstrap.r
 COPY docker/opencpu/entrypoint.sh /entrypoint.sh
+COPY opencpu/tutorial /home/opencpu/tutorial
+RUN chown -R opencpu:www-data /home/opencpu/tutorial
 
 ENTRYPOINT ["/entrypoint.sh"]
 

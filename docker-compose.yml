@@ -117,7 +117,7 @@ services:
       - "BOOTSTRAP_AGAVE_CLIENT=1"
     volumes:
       - training-volume:/home/opencpu/work
-      - "./opencpu/tutorial:/home/opencpu/tutorial"
+#      - "./opencpu/tutorial:/home/opencpu/tutorial"
     labels:
       - "traefik.port=8004"
       - "traefik.protocol=http"
