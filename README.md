@@ -29,7 +29,7 @@ Schedule
   <tr>
     <td class="tg-yw4l">15min</td>
     <td class="tg-yw4l">Rion &amp; Sean</td>
-    <td class="tg-9hbo"><b>Introductions and Overview:</b> Introduce instructors and learners. Lay out learning objectives and provide overview.</td>
+    <td class="tg-9hbo"><b>Introductions and Overview:</b> Introduce instructors and learners. Lay out learning objectives and provide overview. <a href="https://www.dropbox.com/s/6pm8yqwit2vu82i/Agave_Overview.pptx?dl=0" target="_blank">slides</a></td>
   </tr>
   
   <tr>
