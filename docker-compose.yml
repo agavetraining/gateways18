@@ -24,7 +24,7 @@ services:
   # jupyter container. By doing this, we don't need to ship keys with the image
   # or source.
   ssh-keygen:
-    image: agaveplatform/rstudio:3.4.3
+    image: agaveplatform/rstudio:3.4.3-shiny
     entrypoint: /bin/bash
     command: /usr/local/bin/ssh-keygen/keygen.sh
     environment:
@@ -34,16 +34,19 @@ services:
       - "AGAVE_USERNAME=${AGAVE_USERNAME}"
       - "AGAVE_PASSWORD=${AGAVE_PASSWORD}"
       - "AGAVE_TENANT=${AGAVE_TENANT}"
-      - "AGAVE_CACHE_DIR=/home/rstudio/work/.agave"
+      - "AGAVE_CACHE_DIR=/home/${AGAVE_USERNAME}/work/.agave"
       - "S6_KEEP_ENV=1"
     env_file:
       - training.env
     volumes:
-      - ssh-keygen-volume:/home/rstudio/.ssh
-      - ./docker/ssh-keygen:/usr/local/bin/ssh-keygen
+      - "ssh-keygen-volume:/home/${AGAVE_USERNAME}/.ssh"
+      - "./docker/ssh-keygen:/usr/local/bin/ssh-keygen"
 
   rstudio:
-    image: agaveplatform/rstudio:3.4.3
+    build:
+      context: .
+      dockerfile: docker/rstudio/Dockerfile
+    image: agaveplatform/rstudio:3.4.3-shiny
     mem_limit: 2048m
     restart: on-failure
     ports:
@@ -57,8 +60,8 @@ services:
       - "USER=${AGAVE_USERNAME}"
       - "PASSWORD=${AGAVE_PASSWORD}"
       - "AGAVE_CACHE_DIR=/home/${AGAVE_USERNAME}/work/.agave"
-      - "AGAVE_TENANT_BASE_URL=https://agaveapi.co"
-      - "AGAVE_BASE_URL=https://public.agaveapi.co"
+      - "AGAVE_TENANT_BASE_URL=https://sandbox.agaveplatform.org"
+      - "AGAVE_BASE_URL=https://sandbox.agaveplatform.org"
       - "S6_KEEP_ENV=1"
       - "SHINY_CONNECT_USERNAME=${SHINY_CONNECT_USERNAME}"
       - "SHINY_CONNECT_TOKEN=${SHINY_CONNECT_TOKEN}"
@@ -71,8 +74,8 @@ services:
     labels:
       - "traefik.port=8787"
       - "traefik.protocol=http"
-      - "traefik.tags=$AGAVE_USERNAME,jupyter"
-      - "traefik.backend=$AGAVE_USERNAME-training"
+      - "traefik.tags=$AGAVE_USERNAME,rstudio"
+      - "traefik.backend=$AGAVE_USERNAME-training-rstudio"
       - "traefik.frontend.rule=PathPrefix:/"
 
   sandbox:
@@ -94,6 +97,34 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
     labels:
       - traefik.enable=false
+
+  opencpu:
+    build:
+      context: .
+      dockerfile: docker/opencpu/Dockerfile
+    image: agaveplatform/opencpu:latest
+    mem_limit: 1024m
+    restart: on-failure
+    ports:
+      - '8004:8004'
+    depends_on:
+      - ssh-keygen
+    env_file:
+      - training.env
+    environment:
+      - "AGAVE_TENANT_BASE_URL=https://sandbox.agaveplatform.org"
+      - "AGAVE_BASE_URL=https://sandbox.agaveplatform.org"
+      - "BOOTSTRAP_AGAVE_CLIENT=1"
+    volumes:
+      - training-volume:/home/opencpu/work
+      - "./opencpu/tutorial:/home/opencpu/tutorial"
+    labels:
+      - "traefik.port=8004"
+      - "traefik.protocol=http"
+      - "traefik.tags=$AGAVE_USERNAME,opencpu"
+      - "traefik.backend=$AGAVE_USERNAME-training-opencpu"
+      - "traefik.frontend.rule=PathPrefix:/ocpu"
+
 
 #  jenkins:
 #    build:

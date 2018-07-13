@@ -1,6 +1,8 @@
 ---
 title: "R Data Science - Intro to Plots"
-output: html_notebook
+output:
+  html_document:
+    df_print: paged
 authors: Sean Cleveland and Mahdi Belcaid
 ---
 
@@ -9,7 +11,7 @@ authors: Sean Cleveland and Mahdi Belcaid
 spending_df <- read.csv(file="data/spending_10k.tsv", header=TRUE, sep="\t")
 spending_df
 ```
-### Creating a Graph
+### Creating a Graph  
 The R plot function has a usefule number of graphs. Documentation for plot can be found here (https://www.rdocumentation.org/packages/graphics/versions/3.5.0/topics/plot) 
 
 -The parameters required for a simple  scatter plot is x and y.
@@ -28,8 +30,7 @@ To modify the graph type the "type" parameter can be set. "h" can be used for a 
 ```{r}
 plot(x=spending_df$spending,y=spending_df$nb_beneficiaries,main="Spending vs. NB Beneficiaries", xlab="Spending",ylab="Medication",col="blue",type="h")
 ```
-#### Histograms
-
+#### Histograms  
 R has a "hist" function for ploting histogram of the frequency of the data.  The first parameter is the data column we can to plot.  The others like "main","xlab" and "col" we saw in the "plot" function.  
 ```{r}
 hist(spending_df$nb_beneficiaries,
@@ -46,11 +47,13 @@ hist(log(log(spending_df$nb_beneficiaries)),
      border="green", 
      col="blue")
 ```
-### Saving Plots As Images
+### Saving Plots As Images  
+
 R make it pretty simple to save plots as an image with  "png","jpeg" or "pdf" functions.
 - All the function require a filename and the function call to start capture the plot
 - After starting your capture you can render your plot
 - Finally you need to close the capture
+
 ```{r}
 png(filename="hist.png") #being capture in a png
 plot(x=spending_df$spending,y=spending_df$nb_beneficiaries,main="Spending vs. NB Beneficiaries", xlab="Spending",ylab="Medication",col="blue")
@@ -64,7 +67,8 @@ pdf("hist.pdf") #begin capturing in  pdf
 plot(x=spending_df$spending,y=spending_df$nb_beneficiaries,main="Spending vs. NB Beneficiaries", xlab="Spending",ylab="Medication",col="blue")
 while (!is.null(dev.list()))  dev.off() #close capture
 ```
-### Visualizing Linear Relationships
+### Visualizing Linear Relationships  
+
 Now let’s perform a linear regression using lm() on two variables - log nb_benificiaries and log spending:
 
 ```{r}
@@ -79,7 +83,7 @@ log_spending <- log(spending_df$spending)
 plot(log_nb ~ log_spending,data=spending_df,main="Log NB Beneficiaries vs Log Spending", xlab="Log NB Beneficiaries",ylab="Log Spending",col="blue")+
 abline(lm(log_nb ~ log_spending))
 ```
-### Combining Plots
+### Combining Plots  
 R makes it easy to combine multiple plots into one overall graph, using either the 
 par( ) function.
 
@@ -96,7 +100,7 @@ hist(log(log(spending_df$nb_beneficiaries)),
 plot(x=spending_df$spending,y=spending_df$nb_beneficiaries,main="Spending vs. NB Beneficiaries", xlab="Spending",ylab="Medication",col="blue",type="h")
 plot(x=spending_df$spending,y=spending_df$nb_beneficiaries,main="Spending vs. NB Beneficiaries", xlab="Spending",ylab="Medication")
 ```
-### Boxplots
+### Boxplots  
 Boxplots can be created for individual variables or for variables by group. The format is boxplot(x, data=), where x is a formula and data= denotes the data frame providing the data. An example of a formula is y~group where a separate boxplot for numeric variable y is generated for each value of group. Add varwidth=TRUE to make boxplot widths proportional to the square root of the samples sizes. Add horizontal=TRUE to reverse the axis orientation.
 ```r
 boxplot(log_nb~log_spending,data=spending_df, main="Log NB Benenficiaries vs Log Spending", 
@@ -119,7 +123,7 @@ boxplot(nb_beneficiaries~specialty,data=subset_df, main="NB Benenficiaries vs Sp
 boxplot(nb_beneficiaries~indication_flag,data=subset_df, main="Log NB Benenficiaries vs Log Spending", 
   	xlab="Log NB Beneficiaries", ylab="Log Spending",horizontal=TRUE)
 ```
-### Practical
+### Practical  
 
 - Start with a new R Notebook.
 

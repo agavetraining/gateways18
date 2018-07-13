@@ -1,0 +1,16 @@
+Package: converter
+Type: Package
+Title: File format converter
+Version: 0.1
+Date: 2018-07-12
+Author: Rion Dooley
+Maintainer: Rion Dooley
+Description: OpenCPU App for file conversion
+License: BSD 3-Clause
+Depends:
+    rio
+    shiny
+    tools
+    foreign
+    rAgave
+    plyr

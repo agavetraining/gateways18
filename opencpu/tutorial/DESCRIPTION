@@ -1,0 +1,12 @@
+Package: tutorial
+Type: Package
+Title: Tutorial scripts
+Version: 0.1
+Date: 2018-07-12
+Author: Rion Dooley
+Maintainer: Rion Dooley<deardooley@gmail.com>
+Description: OpenCPU App for tutorial scripts
+License: BSD 3-Clause
+Depends:
+  readr,
+  plyr

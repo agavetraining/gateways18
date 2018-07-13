@@ -12,3 +12,6 @@ data/__medication_to_class.tsv
 data/medication_to_class.tsv
 data/spending_correc_data_t.csv
 data/temp
+ngrok*
+./spending.csv
+agave.log
