@@ -1,0 +1,14 @@
+---
+title: "OpenCPU (Hands On)"
+output:
+  html_document:
+    df_print: paged
+---
+
+OpenCPU is a system for embedded scientific computing and reproducible research. The OpenCPU server provides a reliable and interoperable HTTP API for data analysis based on R. You can either use the public servers or host your own.
+
+Links:  
+- [Website](https://www.opencpu.org/)  
+- [Docs](https://docs.opencpu.org/)
+- [Example Apps](https://www.opencpu.org/apps.html)  
+- [Tutorial Server](/ocpu/test/)  
