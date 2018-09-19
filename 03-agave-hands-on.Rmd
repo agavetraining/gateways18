@@ -12,7 +12,7 @@ The rAgave library provides a high-level R binding to the Agave API. The first s
 library("plyr")
 #install("~/rstudio/src/rAgave")
 library('httr')
-library("rAgave")
+
 set_config( config( ssl_verifypeer = 0L ) )
 ```
 
@@ -47,7 +47,7 @@ Now we are ready to instantiate the Agave instance. We will explitly pass in the
 
 ag <-Agave$new( baseUrl=myCreds[["AGAVE_BASE_URL"]],
                 username = myCreds[["AGAVE_USERNAME"]], 
-                password = myCreds[["AGAVE_PASSWORD"]],logLevel=DEBUG)
+                password = myCreds[["AGAVE_PASSWORD"]])
 ```
 
 If you have logged into Agave before, your session will be refreshed automatically when you created the Agave client instance above. You can verify this by checking the `ag$clientInfo` and `ag$tokenInfo` attributes. 
@@ -92,8 +92,8 @@ Your sessions are read from and written to a cache file common to all the Agave 
 Your OAuth token does not contain any identifiable information in and of itself, however we can discover information about the user associated with a token by calling the Profiles API:
 
 ```{r}
-profile <- ag$profiles$getProfile()
-str(profile)
+profile <- ag$profiles$getProfile(responseType='df')
+profile
 ```
 
 Finally, to find out the other attributes and methods available from the `ag` object, standard R completion (`F1`), and the native `help` command both work.
@@ -257,7 +257,7 @@ myfiles <- ag$files$list(path=paste0(Sys.getenv("AGAVE_USERNAME"),"/spending.csv
 myfiles
 
 # Download the file back to our system
-myDownloadPath <- ag$files$download(path=paste0(Sys.getenv("AGAVE_USERNAME"),"/spending.csv"), ,responseType="df")
+myDownloadPath <- ag$files$download(path=paste0(Sys.getenv("AGAVE_USERNAME"),"/spending.csv"), ,responseType="df", overwrite=TRUE)
 myDownloadPath 
 # clean up after we're done
 unlink(paste0(Sys.getenv("AGAVE_USERNAME"),"/spending.csv"))

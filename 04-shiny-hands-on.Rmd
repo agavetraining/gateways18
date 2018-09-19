@@ -5,9 +5,52 @@ output:
     df_print: paged
 ---
 
-Shiny is an R package that makes it easy to build interactive web apps straight from R. You can host standalone apps on a webpage or embed them in R Markdown documents or build dashboards. You can also extend your Shiny apps with CSS themes, htmlwidgets, and JavaScript actions.
+[Website](https://shiny.rstudio.com/) is an R package that makes it easy to build interactive web apps straight from R. You can host standalone apps on a webpage or embed them in R Markdown documents or build dashboards. You can also extend your Shiny apps with CSS themes, htmlwidgets, and JavaScript actions.
 
-Links:  
-- [Website](https://shiny.rstudio.com/)  
-- [Intro](http://zevross.com/blog/2016/04/19/r-powered-web-applications-with-shiny-a-tutorial-and-cheat-sheet-with-40-example-apps/)  
-- [Dashboards](https://rstudio.github.io/shinydashboard/)  
+## Intro to Shiny
+
+We will use the example apps from the [Shiny Tutorial](http://shiny.rstudio.com/tutorial/) that ship with RStudio to get our feet wet with Shiny. We start out by loading the Shiny library. This is the only dependency outside of those from your own R code that you need to run a Shiny app.
+
+```{R}
+library(shiny)
+```
+
+The following commands will launch each of the example apps. For reasons we will discuss in the next session, you should only run one app at a time. 
+
+```{R}
+runExample("01_hello")      # a histogram
+#runExample("02_text")       # tables and data frames
+#runExample("03_reactivity") # a reactive expression
+#runExample("04_mpg")        # global variables
+#runExample("05_sliders")    # slider bars
+#runExample("06_tabsets")    # tabbed panels
+#runExample("07_widgets")    # help text and submit buttons
+#runExample("08_html")       # Shiny app built from HTML
+#runExample("09_upload")     # file upload wizard
+#runExample("10_download")   # file download wizard
+#runExample("11_timer")      # an automated timer
+```
+
+> For a deeper dive into Shiny app development, see [R powered web applications with Shiny (a tutorial and cheat sheet with 40 example apps)](http://zevross.com/blog/2016/04/19/r-powered-web-applications-with-shiny-a-tutorial-and-cheat-sheet-with-40-example-apps/).  
+
+
+## Adding dynamic content for your Shiny app
+
+The example apps provided good examples of the basics of building Shiny apps. We have included 3 additional apps in the `shiny` directory to highlight some ways in which we can use shiny to interact with our existing data and compute resources. 
+
+### Filebrowser
+
+This app builds upon the reactivity example, adding in a path selector in the sidebar and a remote directory listing in the body. Whenever the server receives a change event, it calls out to the Agave R SDK to fetch the new directory path and refresh the display area. 
+
+### Remote Converter
+
+This app builds upon the popular "[rioweb](http://github.com/lbraglia/rioweb)" app from the Shiny showcase, adding support for remote data browsing, and caching. Instead of uploading a file to be converted, this app allows you to select from a remote storage system. The selected file or folder will be fetched, converted, and downloaded to your browser. This is an example of a lightweight tool you can incorporate into your existing stack to provide on-demand data transformation.
+
+### Classifier
+
+This app provides an image classifier that takes as input a job id, runs a ML classification routine on any images in the job's output directory, and publish the ones that are likely matches. This kind of post-processing step is representative of a number of tiny, value-added processes you may need in your own gateways to do things like generate indexes, resize images, stitch togther datasets, generate summaries, reactively process data upon ingest, or kick off another stage in a workflow. Whatever your specific situation, this classifier gives you a quick example of how to accomplish this with Shiny.
+
+
+## Building Dashboards
+
+Another convenient use of Shiny is to construct [Dashboards](https://rstudio.github.io/shinydashboard/). The `shiny/dashboard` directory gives an example of a dashboard built from the API activity during this tutorial. While this is probably not an ideal replacement for Kibana, Chronograph, Plotly, DataDog, or Splunk, it can be an increadibly effective addition to an existing gateway. Imagine refactoring the dashboard to provide metrics or infographics to your users on their utlization when requesting updates on publications, degrees, and other impact metrics. Visualizing progress of data collection, active sensors, locations of data samples or citizen science contributors, etc. The possibilities are endless and the effort is relatively low to add something like this to your own app.
