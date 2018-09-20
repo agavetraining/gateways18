@@ -1,0 +1,75 @@
+---
+title: "Building web APIs and Functions as-a-Service in R"
+output: html_document
+---
+
+Often times, it's not a UI that you need, but the functionality behind it. You have probably heard of and worked with REST APIs before. RESTful JSON APIs dominate the web and mobile space today. With the increased adoption of container technologies and microservice design, the Serverless approach to application deployment has gained significant traction in the last year. The primary driver behind Serverless being the Function as a Service design pattern. 
+
+> Function as a service (FaaS) is a category of cloud computing services that provides a platform allowing customers to develop, run, and manage application functionalities without the complexity of building and maintaining the infrastructure typically associated with developing and launching an app.
+
+In this section, we will revisit our Shiny apps and see how we can expose the same functionality as a REST API that we can treat like a Function similar to Amazon's Lambda, IronWorker, FaaS, Fission, etc. We will focus our attention on two popular projects to enable this in R: OpenCPU and Plumber.
+
+## Plumber
+
+[Plumber](https://www.rplumber.io/) is an R package that converts your existing R code to a web API using a decorators in your source code. Unlike Shiny, no additional hosting environment is needed, and syntax is familiar if you have ever written a REST service in another language. 
+
+The `plumber` directory contains examples of our Shiny apps rewritten as REST APIs using Plumber. You can run each API by `cd`ing into each example directory from the terminal and executing the `run.sh` script.
+
+### Filebrowser
+
+### Remote Converter
+
+### Classifier
+
+
+
+## OpenCPU
+
+[OpenCPU](https://www.opencpu.org/) is an opinionated system for embedded scientific computing and reproducible research. The OpenCPU server provides a reliable and interoperable HTTP API for data analysis based on R. You can either use the public servers or host your own. 
+
+The `opencpu` directory contains the source code of an example OpenCPU package. To save some time, an OpenCPU server has already been deployed to your training environment with the OpenCPU examples. You can access the OpenCPU browser at [/opencpu](/opencpu).
+
+##
+### Filebrowser
+
+### Remote Converter
+
+### Classifier
+
+### Publishing and discoverying code
+
+Whereas Plumber was about as thin a wrapper as you could place around your existing code to expose it via the web, OpenCPU provides a full suite of discovery, management, and publishing services, and content negotiation. Another big difference with OpenCPU is that state, throttling, and caching are supported natively by the OpenCPU server. 
+
+### Publishing and versioning
+
+### Administration
+
+
+## Playground vs Production
+
+
+### Concurrency
+
+OpenCPU is built on Apache, so has all the plumbing (no pun intended) to handle concurrency well. One thing currently lacking from the latest release is the ability to rate limit the requests at the host and individual route level. Depending on what your particular package is doing, several quick requests could bring down the entire host. This may not be your use case, but it is worth keeping in mind.
+
+### Statefulness and caching
+
+OpenCPU has it. Plumber does not. This may not be an issue, but as traffic increases, caching becomes important, so a solution such as redis, memcache, varnish, or an API management layer will likely be needed if your Plumber service catches on.
+
+### Hosting
+
+Both projects can be hosted on standard linux servers. Your R code may take advantage of GPUs, or large memory operations, in which case, plan your hosting accordingly. For basic use, simply deploying either one as a Docker container should be sufficient to get you up and running quickly.  
+
+### Identity
+
+OpenCPU has authentication and authorization baked into the server using linux host security. For integration into an external authorization service, such as OAuth2 or SSL Auth, the logic would need to be dropped into the service itself using one of R's existing packages.
+
+### Security
+
+### API Management
+
+### Versioning
+
+### Knowing when to rewrite
+
+

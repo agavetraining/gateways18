@@ -1,6 +1,12 @@
-## --------
-## server.R
-## --------
+# --------
+# server.R
+#
+# This is the server component of a data transformation app implemented
+# in R with the Shiny framework. The app uses the Agave Platform's R SDK
+# list and fetch remote data, then uses the `rio` library to convert the
+# data into another format.
+#
+# --------
 
 library(rio)
 library(shiny)
@@ -21,10 +27,22 @@ make_sas_csv <- function(x, file, filesnames){
 }
 
 shinyServer(
-    function(input, output){
+  function(input, output){
+
+      # Requests are stateless, so we initialize the Agave object here.
+      # Logging is enabled so we can feed this app's logs into our
+      # gateway's logging solution.
+      #
+      # The SDK handles token refresh for us, so we can focus on what
+      # we need to do for our application.
       ag<-Agave$new(logLevel=DEBUG)
-      
+
+      # List the remote path and send the resutls to the UI for
+      # rendering in the DataTable
       output$table <- renderDataTable(ag$files$list(path=input$filePath, responseType='df'))
+
+      # When the download button is clicked, fetch the file, convert,
+      # and stream to the user.
       output$download_data <- downloadHandler(
             filename = function() {
                 name <- basename(file_path_sans_ext(input$filePath))
