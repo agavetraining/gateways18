@@ -26,7 +26,7 @@ ls -l $TUTORIAL_FOLDER  | grep ".Rmd"
 ```{bash}
 # list current tutorials
 cd $HOME
-ls -l | grep ".ipynb"
+ls -l | grep ".Rmd"
 ```
 
 ```{bash}

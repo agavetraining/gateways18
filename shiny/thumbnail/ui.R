@@ -29,10 +29,13 @@ shinyUI(fluidPage(sidebarLayout(
   
   mainPanel(
     titlePanel("Yet another thumbnail service"),
+    h4(textOutput("caption", container = span)),
     verbatimTextOutput("message"),
-    imageOutput("thumbnailImage"),
-    imageOutput("fullImage"),
-    h4(textOutput("caption", container = span))
+    fluidRow(
+      column(2,imageOutput("thumbnailImage")),
+      column(10, imageOutput("fullImage"))
+    ),
+    DT::dataTableOutput('table')
   )
   
 )))

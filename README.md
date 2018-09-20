@@ -38,14 +38,9 @@ Schedule
     <td class="tg-9hbo"><b>Agave Overview:</b> Brief introduction to the Agave Platform </td>
   </tr>
   <tr>
-    <td class="tg-yw4l">30 min</td>
+    <td class="tg-yw4l">45 min</td>
     <td class="tg-yw4l">Sean</td>
     <td class="tg-9hbo"><b>Intro to R for data science:</b> Clone and customize an example app. Run the app both through the web API and the notebook</td>
-  </tr>
-  <tr>
-    <td class="tg-yw4l">30 min</td>
-    <td class="tg-yw4l">Rion</td>
-    <td class="tg-9hbo"><b>Hands on with the Agave R SDK:</b> Primer on using the Agave R SDK to access data, run code, collaborate with other participants, and integrate into their notebook and gateway environments</td>
   </tr>
   <tr>
     <td class="tg-yw4l">15 min</td>
@@ -53,14 +48,44 @@ Schedule
     <td class="tg-9hbo"><b>Break</b> </td>
   </tr>
   <tr>
-    <td class="tg-yw4l">25 min</td>
-    <td class="tg-yw4l">Sean</td>
-    <td class="tg-9hbo"><b>Hands on building Shiny apps:</b> Intro to Shiny and pragmatic gateway design</td>
+    <td class="tg-yw4l">45 min</td>
+    <td class="tg-yw4l">Rion</td>
+    <td class="tg-9hbo"><b>Hands on with the Agave R SDK:</b> Primer on using the Agave R SDK to access data, run code, collaborate with other participants, and integrate into their notebook and gateway environments</td>
+  </tr>
+  <tr>
+    <td class="tg-yw4l">30 min</td>
+    <td class="tg-yw4l">Rion</td>
+    <td class="tg-9hbo"><b>Building Apps, APIs, and Functions in R</b> Primer on architectural approaches to support gateways in R.</td>
   </tr>
   <tr>
     <td class="tg-yw4l">15 min</td>
+    <td class="tg-yw4l">Sean</td>
+    <td class="tg-9hbo"><b>Hands on building Shiny apps:</b> Intro to Shiny and pragmatic gateway design</td>
+  </tr>  
+  <tr>
+    <td class="tg-yw4l">60 min</td>
+    <td class="tg-baqh">--</td>
+    <td class="tg-9hbo"><b>Lunch</b> </td>
+  </tr>
+  <tr>
+    <td class="tg-yw4l">20 min</td>
+    <td class="tg-yw4l">Sean</td>
+    <td class="tg-9hbo"><b>Hands on building Shiny apps:</b> Intro to Shiny and pragmatic gateway design</td>
+  </tr>  
+  <tr>
+    <td class="tg-yw4l">10 min</td>
     <td class="tg-yw4l">Rion</td>
-    <td class="tg-9hbo"><b>Securing and publishing your app:</b> Publish the example code as a standalone web application, add security, discuss integration strategies</td>
+    <td class="tg-9hbo"><b>Securing and publishing your Shiny app:</b> Publish the example code as a standalone web application, add security, discuss integration strategies</td>
+  </tr>
+  <tr>
+    <td class="tg-yw4l">20 min</td>
+    <td class="tg-yw4l">Sean</td>
+    <td class="tg-9hbo"><b>Hands on building a Plumber API:</b> Intro to Plumber and best practices for REST API design</td>
+  </tr>
+  <tr>
+    <td class="tg-yw4l">20 min</td>
+    <td class="tg-yw4l">Rion</td>
+    <td class="tg-9hbo"><b>Securing and publishing your Plumber API:</b> Publish the example code as a REST API with Plumber, add API Management and security</td>
   </tr>
   <tr>
     <td class="tg-yw4l">20 min</td>
@@ -70,7 +95,7 @@ Schedule
   <tr>
     <td class="tg-yw4l">20 min</td>
     <td class="tg-yw4l">Rion</td>
-    <td class="tg-9hbo"><b>Securing and publishing your API:</b> Publish the example code as a REST API, add API Management and security</td>
+    <td class="tg-9hbo"><b>Securing and publishing your OpenCPU API:</b> Publish the example code as a REST API, add API Management and security</td>
   </tr>
   <tr>
     <td class="tg-yw4l">5 min</td>

@@ -17,6 +17,8 @@ library(httr)
 library(plyr)
 library(rAgave)
 library(OpenImageR)
+library(DT)
+library(gdalUtils)
 
 set_config( config( ssl_verifypeer = 0L ) )
 
@@ -31,18 +33,33 @@ shinyServer(
     # we need to do for our application.
     ag<-Agave$new(logLevel=DEBUG)
     
-    # List the remote path and send the resutls to the UI for
-    # rendering in the DataTable
-    #output$table <- renderDataTable(ag$files$list(path=input$filePath, responseType='df'))
+    # Send the resutls to the UI for rendering in the DataTable
+    # Note the server-side processing here
+    options(DT.options = list(pageLength = 5))
+    output$table <- DT::renderDataTable(
+      ag$files$list(path=input$filePath, filter="name,length,type,path", responseType='df'), 
+      server = TRUE, 
+      selection = 'single'
+      )
     
+    output$filePath <- input$table_rows_selected[1]
     output$caption <- renderText({
-      tools::file_ext(basename(input$filePath))
+      cat(input$table_rows_selected[1],',')
+      
+      input_file_format <- tools::file_ext(basename(input$filePath))
+      if (input_file_format != '') {
+        tools::file_ext(basename(input_file_format))
+      }
+      else {
+        print("No file selected")
+      }
     })
     
     # A dynamically generated thumbnail
     output$thumbnailImage <- renderImage({
       remoteFileExtension <- tools::file_ext(basename(input$filePath))
       if (remoteFileExtension != '') {
+        
         
         # download the remote file
         localPath <- ag$files$download(path=input$filePath, overwrite=TRUE)
@@ -75,6 +92,23 @@ shinyServer(
              width = input$width,
              height = input$height,
              alt = "This is thumbnail alt text")
+      }
+      else {
+        
+        output$fullImage <- renderImage({
+          
+          # Return a list containing the filename
+          list(src = '',
+               width = 0,
+               height = 0,
+               alt = "No original image selected")
+        })
+        
+        # Return a list containing the filename
+        list(src = '',
+             width = 0,
+             height = 0,
+             alt = "No thumbnail image generated")
       }
       
       

@@ -70,7 +70,7 @@ services:
       - "ssh-keygen-volume:/home/$AGAVE_USERNAME/.ssh"
       - "training-volume:/home/$AGAVE_USERNAME/work"
       - ".:/home/$AGAVE_USERNAME/notebooks"
-      - "./INSTALL.ipynb:/home/$AGAVE_USERNAME/INSTALL.ipynb"
+      - "./INSTALL.Rmd:/home/$AGAVE_USERNAME/INSTALL.Rmd"
     labels:
       - "traefik.port=8787"
       - "traefik.protocol=http"
