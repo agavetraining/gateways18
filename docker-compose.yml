@@ -51,6 +51,8 @@ services:
     restart: on-failure
     ports:
       - '8787:8787'
+      - '9101-10:9101-10'
+      - '9200-10:9200-10'
     depends_on:
       - ssh-keygen
     env_file:
@@ -78,6 +80,11 @@ services:
       - "traefik.backend=$AGAVE_USERNAME-training-rstudio"
       - "traefik.frontend.rule=PathPrefix:/"
 
+  plumber:
+    build:
+      context: .
+      dockerfile: docker/plumber/Dockerfile
+    image: agaveplatform/plumber
   sandbox:
     image: agaveplatform/training-sandbox:latest
     mem_limit: 2048m
