@@ -85,6 +85,21 @@ services:
       context: .
       dockerfile: docker/plumber/Dockerfile
     image: agaveplatform/plumber
+    restart: on-failure
+    ports:
+      - '9300:9300'
+    mem_limit: 2048m
+    privileged: True
+    env_file:
+      - training.env
+    labels:
+      - "traefik.port=9300"
+      - "traefik.protocol=http"
+      - "traefik.tags=$AGAVE_USERNAME,plumber"
+      - "traefik.backend=$AGAVE_USERNAME-training-plumber"
+      - "traefik.frontend.rule=PathPrefixReplace:/plumber"
+
+
   sandbox:
     image: agaveplatform/training-sandbox:latest
     mem_limit: 2048m
