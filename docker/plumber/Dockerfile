@@ -16,15 +16,10 @@ RUN apt-get update -qq && apt-get install -y \
 RUN  install2.r plumber rio tools foreign shiny rmarkdown png jpeg tiff OpenImageR DT clipr csvy feather fst readODS rmatio openssl plumber jose devtools
 
 # install agave library
-RUN git clone --depth=1 https://github.com/agaveplatform/r-sdk.git /usr/local/rAgave && \
-    R -e 'library("devtools")' \
-      -e 'devtools::install("/usr/local/rAgave")' && \
-    rm -rf /usr/local/rAgave && \
+RUN R -e 'devtools::install_github("agaveplatform/r-sdk")' && \
     cd & \
-    echo 'set_config( config( ssl_verifypeer = 0L ) )' >> /etc/R/Rprofile.site && \
-    echo "library('plyr')" >> /etc/R/Rprofile.site && \
-    echo "library('rAgave')" >> /etc/R/Rprofile.site && \
-    echo "library('httr')" >> /etc/R/Rprofile.site
+    echo "library(httr)" >> /etc/R/Rprofile.site && \
+    echo 'set_config( config( ssl_verifypeer = 0L ) )' >> /etc/R/Rprofile.site
 
 COPY docker/plumber/AgaveBootstrap.r /AgaveBootstrap.r
 COPY docker/plumber/entrypoint.sh /entrypoint.sh

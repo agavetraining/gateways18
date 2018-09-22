@@ -41,6 +41,8 @@ services:
     volumes:
       - "ssh-keygen-volume:/home/${AGAVE_USERNAME}/.ssh"
       - "./docker/ssh-keygen:/usr/local/bin/ssh-keygen"
+    labels:
+      - "traefik.enable=false"
 
   rstudio:
     build:
@@ -51,8 +53,11 @@ services:
     restart: on-failure
     ports:
       - '8787:8787'
-      - '9101-10:9101-10'
-      - '9200-10:9200-10'
+      - '9100:9100'
+      - '9101:9101'
+      - '9102:9102'
+      - '9103:9103'
+      - '9200:9200'
     depends_on:
       - ssh-keygen
     env_file:
@@ -74,6 +79,7 @@ services:
       - ".:/home/$AGAVE_USERNAME/notebooks"
       - "./INSTALL.Rmd:/home/$AGAVE_USERNAME/INSTALL.Rmd"
     labels:
+      - "traefik.enable=true"
       - "traefik.port=8787"
       - "traefik.protocol=http"
       - "traefik.tags=$AGAVE_USERNAME,rstudio"
@@ -89,16 +95,17 @@ services:
     ports:
       - '9300:9300'
     mem_limit: 2048m
-    privileged: True
     env_file:
       - training.env
     labels:
+      - "traefik.enable=true"
       - "traefik.port=9300"
       - "traefik.protocol=http"
       - "traefik.tags=$AGAVE_USERNAME,plumber"
       - "traefik.backend=$AGAVE_USERNAME-training-plumber"
-      - "traefik.frontend.rule=PathPrefixReplace:/plumber"
-
+      - "traefik.frontend.rule=PathPrefix:/plumber"
+    volumes:
+      - ./plumber:/usr/local/agavetraining/examples
 
   sandbox:
     image: agaveplatform/training-sandbox:latest
@@ -118,7 +125,7 @@ services:
       - training-volume:/home/jovyan/work
       - /var/run/docker.sock:/var/run/docker.sock
     labels:
-      - traefik.enable=false
+      - "traefik.enable=false"
 
   opencpu:
     build:
@@ -141,6 +148,7 @@ services:
       - training-volume:/home/opencpu/work
 #      - "./opencpu/tutorial:/home/opencpu/tutorial"
     labels:
+      - "traefik.enable=true"
       - "traefik.port=8004"
       - "traefik.protocol=http"
       - "traefik.tags=$AGAVE_USERNAME,opencpu"

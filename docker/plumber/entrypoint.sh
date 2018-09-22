@@ -17,13 +17,11 @@ touch "$AGAVE_CACHE_DIR/current"
 if [ -n "$AGAVE_VARS" ]; then
   # if the file exists, clear out the old vars, add the new
   if [ -e "/etc/opencpu/Renviron" ]; then
-    sed -i 's/^AGAVE.*//g' /etc/opencpu/Renviron
     sed -i 's/^AGAVE.*//g' $HOME/.Renviron
   fi
 
   for i in `env | grep '^AGAVE_'`; do
     echo "export $i"
-    echo "$i" >> /etc/opencpu/Renviron
     echo "$i" >> $HOME/.Renviron
   done
 
@@ -38,4 +36,5 @@ fi
 
 
 # Startup the plumber server passing in the given command
-R -e "pr <- plumber::plumb(commandArgs()[4]); pr$run(host='0.0.0.0', port=9300)" "$@"
+R -e "pr <- plumber::plumb('$@')" \
+  -e "pr\$run(host='0.0.0.0', port=9300)"
