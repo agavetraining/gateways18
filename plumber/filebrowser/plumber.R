@@ -4,7 +4,7 @@
 #
 # The SDK handles token refresh for us, so we can focus on what
 # we need to do for our application.
-ag<-Agave$new(logLevel=DEBUG)
+ag<-Agave$new(logLevel=TRACE)
 
 
 # Performs remote directory listing on the given file path

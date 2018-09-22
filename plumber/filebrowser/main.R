@@ -8,6 +8,10 @@ library(plumber)
 library(httr)
 library(plyr)
 library(rAgave)
+library(jsonlite)
 
-r <- plumb("plumber.R")  # Where 'plumber.R' is the location of the file shown above
+library(rstudioapi)    
+sourceDir <- dirname(rstudioapi::getActiveDocumentContext()$path)
+
+r <- plumb(paste0(sourceDir, "/plumber.R"))
 r$run(port=9200)
