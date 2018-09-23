@@ -6,11 +6,8 @@ RUN apt update && \
     R -e 'install.packages(c("devtools", "xml2","plyr", "roxygen2", "rio", "tools", "foreign", "shiny", "clipr", "csvy", "feather", "fst", "readODS", "rmatio"))'
 
 # install agave library
-RUN git clone --depth=1 https://github.com/agaveplatform/r-sdk.git /usr/local/rAgave && \
-    R -e 'devtools::install("/usr/local/rAgave")' \
-      -e 'devtools::document("/usr/local/rAgave")' \
-      -e 'devtools::install("/usr/local/rAgave")' && \
-    rm -rf /usr/local/rAgave
+RUN R -e 'install.packages("testthis")' \ 
+      -e 'devtools::install_github("agaveplatform/r-sdk")' 
 
 RUN mkdir -p /home/opencpu/work/.agave && \
     echo "AGAVE_CACHE_DIR=/home/opencpu/work/.agave" && \
