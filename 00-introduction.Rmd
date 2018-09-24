@@ -5,10 +5,10 @@ date: "9/19/2018"
 output: html_document
 ---
 
-**Date:** Tuesday, September 25, 2018
-**Time:** 9:00am - 5:00pm
-**Location:** Texas Advanced Computing Center, Austin, TX
-**Registration:** <a href="https://sciencegateways.org/web/gateways2018/attend/register">Registration</a>
+**Date:** Tuesday, September 25, 2018  
+**Time:** 9:00am - 5:00pm  
+**Location:** Texas Advanced Computing Center, Austin, TX  
+**Registration:** <a href="https://sciencegateways.org/web/gateways2018/attend/register">Registration</a>  
 
 ## Abstract
 
@@ -22,6 +22,36 @@ The R language is used within the Data Science community as a pragmatic problem 
 
 ## Schedule
 
+<!--html_preserve-->
+<style>
+table.tg {
+    margin-left: auto;
+    margin-right: auto;
+    border: 1px solid #000;
+    border-collapse: collapse;
+    max-width: 100%;
+    background-color: transparent;
+    border-spacing: 0;
+}
+table.tg tr {
+    border: 1px solid #000;
+    border-collapse: collapse;
+    margin: 1em 2em;
+}
+table.tg tr > th {
+    font-weight: bold;
+}
+
+table.tg tr > th, table.tg tr > td {
+    text-align: left;
+    vertical-align: middle;
+    padding: 4px;
+    border: 1px solid #000;
+    border-collapse: collapse;
+    margin: 1em 2em;
+}
+
+</style>
 <table class="tg">
   <tr>
     <th class="tg-yw4l">Duration</th>
@@ -110,40 +140,41 @@ The R language is used within the Data Science community as a pragmatic problem 
     <td class="tg-9hbo"><b>Conclusion/Wrap-Up:</b> Next steps and ways to stay connected</td>
   </tr>
 </table>
+<!--/html_preserve-->
 
 ## Presenters
-
-<table>
+<!--html_preserve-->
+<table class="tg">
     <tbody>
   <tr>
-    <td>
-    <h3>Rion Dooley<br><span style="font-size: .8em"><a href="https://twitter.com/deardooley/">DNA Consulting</a></span></h3>
+    <td style="width: 224px;">
       <div>
         <img style="width:224px;" src="https://raw.githubusercontent.com/agavetraining/gateways18/master/images/rion_dooley.jpg">
       </div>
     </td>
     <td>
-      Rion Dooley is principal investigator on the Agave Project a Science-as-a-Service API platform allowing researchers worldwide to manage data, run code, collaborate freely, and integrate their science anywhere. His previous projects span areas of identity management, distributed web security, full-stack application development, data management, cloud services, and high performance computing. He earned his Ph.D. in computer science from Louisiana State University. Rion actively puts his wife and two daughters at the top of his list of accomplishments. He hopes his work can someday edge out dancing teddy bears and smear-proof lipstick on their lists of favorite inventions.
+      <h3>Rion Dooley<br><span style="font-size: .8em"><a href="https://datamachines.io">Data Machines</a></span></h3>
+      <div>Rion Dooley is principal investigator on the Agave Project a Science-as-a-Service API platform allowing researchers worldwide to manage data, run code, collaborate freely, and integrate their science anywhere. His previous projects span areas of identity management, distributed web security, full-stack application development, data management, cloud services, and high performance computing. He earned his Ph.D. in computer science from Louisiana State University. Rion actively puts his wife and two daughters at the top of his list of accomplishments. He hopes his work can someday edge out dancing teddy bears and smear-proof lipstick on their lists of favorite inventions.</div>
     </td>
   </tr>
   <tr>
+    <td style="width: 224px;">
+    <div>
+        <img style="width:224px;" src="https://raw.githubusercontent.com/agavetraining/gateways18/master/images/sean_cleveland.jpg">
+    </div>
+    </td>
     <td>
     <h3>Sean Cleveland<br>
     <span style="font-size: .8em">
         <a href="https://hawaii.edu/">University of Hawaii</a>
     </span>
     </h3>
-    <div>
-        <img style="width:224px;" src="https://raw.githubusercontent.com/agavetraining/gateways18/master/images/sean_cleveland.jpg">
-    </div>
-    </td>
-    <td>
-    Sean Cleveland is a Cyberinfrastructure Research Scientist in the Department of Cyberinfrastructure within Information Technology Services at the University of Hawaii. He focuses on supporting the research mission by providing technology assistance and solutions for researchers across the University of Hawaii system. In addition, he is assisting in the rollout of new centralized computing resources and services for the University system. Sean earned his B.S. in Computer Science from Montana State University in 2002 and his doctorate in Microbiology, with an emphasis in Bioinformatics, from Montana State University in 2013.His research interests include evolutionary dynamics, disorder, compensatory mutations and intra-residue contact prediction, and data lifecycle management
+    <div>Sean Cleveland is a Cyberinfrastructure Research Scientist in the Department of Cyberinfrastructure within Information Technology Services at the University of Hawaii. He focuses on supporting the research mission by providing technology assistance and solutions for researchers across the University of Hawaii system. In addition, he is assisting in the rollout of new centralized computing resources and services for the University system. Sean earned his B.S. in Computer Science from Montana State University in 2002 and his doctorate in Microbiology, with an emphasis in Bioinformatics, from Montana State University in 2013.His research interests include evolutionary dynamics, disorder, compensatory mutations and intra-residue contact prediction, and data lifecycle management</div>
     </td>
   </tr>
   </tbody>
 </table>
-
+<!--/html_preserve-->
 
 ## Acknowledgement
 
