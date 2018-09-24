@@ -5,3 +5,33 @@ date: "9/19/2018"
 output: html_document
 ---
 
+With an introduction to R under our belt, we can turn our attention to applying it in ways that can help us present, access, and extend our science. Throughout the remainder of the tutorial, we look at the following use cases to guide our discussion:
+
+1. Remote data access: provide access to a secure, remote storage resource from the web. 
+2. Data transformation/conversion: provide a mechanism to discover data on a remote storage resource, transform it using a mechanism selected by the user from a predefined set of techniques, and download to the user.
+3. Thumbnail generation: provide a thumbnail service for remote data.
+4. *(Classifier)*: provide an on-demand feature classification mechanism for a known data structure.
+
+The reminder of this training will be hands-on as we implement solutions to each use case in the form of a Science Gateway, a REST API, and a serverless function. 
+
+## Science Gateways
+What is a science gateway?
+
+> A webapp that connects you with your science.
+
+Science gateways ake on all shapes and sizes. We saw several in the slide deck this morning. This talk won't cover all the ins and outs of building large, full-featured gateways. Instead, we will focus on how to add value to existing gateways and create lightweight standalone gateways using [Shiny](https://shiny.rstudio.com). We will take a brief tour of Shiny app development, then build and test apps for each of our use cases.
+
+## Web API
+It is difficult to build a web application today that does not make use of at least one web API. It is the proliferation of HTTP based web services that make everything from the power in this building to the cell phones (hopefully) put away in our bags work in harmony. While there are many different approaches to building and consuming web API, the most widely adopted of those is REST. 
+
+> Representational State Transfer (REST) is an architectural style that defines a set of constraints to be used for creating web services. Web Services that conform to the REST architectural style, or RESTful web services, provide interoperability between computer systems on the Internet. - [Wikipedia](https://en.wikipedia.org/wiki/Representational_state_transfer)
+
+We will dive back into each of our use cases, looking at how to refactor our existing Shiny implementations into REST APIs using [Plumber](https://www.rplumber.io/). We will look at several ways we can leverage this design to augment existing gateway behavior and provide greater integration with third-party services.
+
+## Functions-as-a-Service
+With the increased adoption of [container technologies](https://www.techradar.com/news/what-is-container-technology) and [microservice design](https://microservices.io/), the [Serverless](https://en.wikipedia.org/wiki/Serverless_computing) approach to application development has gained quite a bit of traction. The primary driver behind Serverless being the Function-as-a-Service design pattern. 
+
+> Function as a service (FaaS) is a category of cloud computing services that provides a platform allowing customers to develop, run, and manage application functionalities without the complexity of building and maintaining the infrastructure typically associated with developing and launching an app.
+
+In this section, we will revisit our use cases, and look at how we might realize implement the same functionality serverless Functions similar to Amazon's Lambda, IronWorker, FaaS, Fission, etc. We will use the popular [OpenCPU](https://www.opencpu.org) project for this tutorial, while touching on several other options that you can explore on your own.
+

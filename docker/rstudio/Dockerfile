@@ -15,6 +15,8 @@ ADD docker/ssh-keygen/keygen.sh /usr/local/bin/keygen.sh
 
 RUN chmod 755 /usr/local/bin/keygen.sh
 
+RUN pip install virtualenv
+
 EXPOSE 8787 9101 9102 9103 9104 9200
 
 CMD ["/init"]
